@@ -2,6 +2,7 @@ const conn = require("../mariadb");
 const { StatusCodes } = require("http-status-codes");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -19,7 +20,9 @@ const join = (req, res) => {
       console.log(err);
       return res.status(StatusCodes.BAD_REQUEST).end();
     }
+
     return res.status(StatusCodes.CREATED).json(results);
+
   });
 };
 
@@ -34,7 +37,12 @@ const login = (req, res) => {
       return res.status(StatusCodes.BAD_REQUEST).end();
     }
     const loginUser = results[0];
-    if (loginUser && loginUser.password == password) {
+
+    const hashPassword = crypto
+      .pbkdf2Sync(password, loginUser.salt, 10000, 10, "sha512")
+      .toString("base64");
+    if (loginUser && loginUser.password == hashPassword) {
+
       const token = jwt.sign(
         {
           email: loginUser.email,
@@ -77,8 +85,14 @@ const requestPasswordReset = (req, res) => {
 
 const passwordReset = (req, res) => {
   const { email, password } = req.body;
-  let sql = "UPDATE users SET password=? WHERE email=?";
-  let values = [password, email];
+
+  let sql = "UPDATE users SET password=?, salt =? WHERE email=?";
+  const salt = crypto.randomBytes(10).toString("base64");
+  const hashPassword = crypto
+    .pbkdf2Sync(password, salt, 10000, 10, "sha512")
+    .toString("base64");
+  let values = [hashPassword, salt, email];
+
   conn.query(sql, values, (err, results) => {
     if (err) {
       console.log(err);
