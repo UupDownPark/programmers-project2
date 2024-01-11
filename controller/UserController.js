@@ -3,7 +3,9 @@ const { StatusCodes } = require("http-status-codes");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const dotenv = require("dotenv");
+
 dotenv.config();
+
 const join = (req, res) => {
   const { email, password } = req.body;
   const salt = crypto.randomBytes(10).toString("base64");
@@ -17,7 +19,7 @@ const join = (req, res) => {
       console.log(err);
       return res.status(StatusCodes.BAD_REQUEST).end();
     }
-    res.status(StatusCodes.CREATED).json(results);
+    return res.status(StatusCodes.CREATED).json(results);
   });
 };
 
@@ -72,6 +74,7 @@ const requestPasswordReset = (req, res) => {
     }
   });
 };
+
 const passwordReset = (req, res) => {
   const { email, password } = req.body;
   let sql = "UPDATE users SET password=? WHERE email=?";
