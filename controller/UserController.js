@@ -20,7 +20,9 @@ const join = (req, res) => {
       console.log(err);
       return res.status(StatusCodes.BAD_REQUEST).end();
     }
-    res.status(StatusCodes.CREATED).json(results);
+
+    return res.status(StatusCodes.CREATED).json(results);
+
   });
 };
 
@@ -35,10 +37,13 @@ const login = (req, res) => {
       return res.status(StatusCodes.BAD_REQUEST).end();
     }
     const loginUser = results[0];
+
+  
     const hashPassword = crypto
       .pbkdf2Sync(password, loginUser.salt, 10000, 10, "sha512")
       .toString("base64");
     if (loginUser && loginUser.password == hashPassword) {
+
       const token = jwt.sign(
         {
           email: loginUser.email,
@@ -78,6 +83,7 @@ const requestPasswordReset = (req, res) => {
     }
   });
 };
+
 const passwordReset = (req, res) => {
   const { email, password } = req.body;
 
