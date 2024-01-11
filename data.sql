@@ -12,3 +12,6 @@ VALUES ("흥부와 놀부들", "종이책", 3, "제비..", "까만 제비..", "�
 
 select * from books LEFT
 JOIN category ON books.category_id = category.id
+
+select * from books LEFT
+JOIN category ON books.category_id = category.id WHERE books.id=?
