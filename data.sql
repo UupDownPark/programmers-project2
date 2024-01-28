@@ -15,3 +15,19 @@ JOIN category ON books.category_id = category.id
 
 select * from books LEFT
 JOIN category ON books.category_id = category.id WHERE books.id=?
+
+INSERT INTO likes (user_id, liked_book_id) VALUES (2, 5);
+
+DELETE FROM likes WHERE user_id = 1 AND liked_book_id = 3;
+
+SELECT count(*) FROM likes WHERE liked_book_id=1
+
+SELECT *,(SELECT count(*) FROM likes WHERE liked_book_id=books.id) AS likes FROM books
+
+SELECT *,
+(SELECT count(*) FROM likes WHERE liked_book_id=books.id) AS likes,
+(SELECT EXISTS(SELECT * FROM likes WHERE user_id=1 AND liked_book_id=0)) AS liked 
+FROM books
+LEFT JOIN category
+ON books.category_id = category.id
+WHERE books.id=1
