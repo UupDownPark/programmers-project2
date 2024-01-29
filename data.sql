@@ -31,3 +31,13 @@ FROM books
 LEFT JOIN category
 ON books.category_id = category.id
 WHERE books.id=1
+
+//장바구니 담기
+INSERT INTO cartItems (book_id, quantity, user_id) VALUES (1, 1, 1);
+
+//장바구니 조회
+SELECT cartItems.id,book_id,title,summary,quantity,price
+FROM cartItems LEFT JOIN books
+ON cartItems.book_id = books.id
+
+SELECT * FROM Bookshop.cartItems WHERE user_id=1 AND id IN (1,3)
