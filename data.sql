@@ -41,3 +41,19 @@ FROM cartItems LEFT JOIN books
 ON cartItems.book_id = books.id
 
 SELECT * FROM Bookshop.cartItems WHERE user_id=1 AND id IN (1,3)
+
+
+//주문하기
+//배송 정보 입력
+INSERT INTO delivery (address,receiver,contact) VAlUES ("서울시 중구","상하팍","111-1111-1111")
+
+//주문 정보 입력
+INSERT INTO orders (book_title, total_quantity, total_price, user_id, delivery_id) 
+VALUES ("어린왕자들", 3, 60000, 1, delivery_id);
+
+
+//
+INSERT INTO orderedBook (order_id, book_id, quantity)
+VALUES (order_id, 1, 1);
+INSERT INTO orderedBook (order_id, book_id, quantity)
+VALUES (order_id, 3, 2);
