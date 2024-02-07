@@ -22,7 +22,6 @@ const join = (req, res) => {
     }
 
     return res.status(StatusCodes.CREATED).json(results);
-
   });
 };
 
@@ -38,14 +37,13 @@ const login = (req, res) => {
     }
     const loginUser = results[0];
 
-  
     const hashPassword = crypto
       .pbkdf2Sync(password, loginUser.salt, 10000, 10, "sha512")
       .toString("base64");
     if (loginUser && loginUser.password == hashPassword) {
-
       const token = jwt.sign(
         {
+          id: loginUser.id,
           email: loginUser.email,
         },
         process.env.PRIVATE_KEY,
